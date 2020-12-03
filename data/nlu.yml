@@ -2,7 +2,7 @@ version: "2.0"
 nlu:
 - intent: greet
   examples: |
-    - hey this is working
+    - hey this is working or not
     - hello this is sairam sairam sairam sairam
     - how are u safi
     - added model
