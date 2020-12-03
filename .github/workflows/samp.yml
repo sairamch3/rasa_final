@@ -58,15 +58,20 @@ jobs:
       if: env.RUN_TRAINING == 'true'
       working-directory: ${{ github.workspace }}
       run: |
+        models = `ls models/*.tar.gz`
+        echo "models---------------------------$models"
         model_path=`ls models/*.tar.gz | head -n 1`
+        model_path_n1=`ls -Art models/*.tar.gz | tail -n 1`
         echo "-----------------------------$model_path"
+        echo "-----model_path_n1 $model_path_n1"
         curl -k -F "model=@${model_path}" "${{ env.DOMAIN }}/projects/default/models?api_token=${{env.RASA_X_API_TOKEN}}"
-    - name: Model active
-      if: env.RUN_TRAINING == 'true'
-      working-directory: ${{ github.workspace }}
-      run: |
-        model_path=`ls models/*.tar.gz | head -n 1`
-        export model_fileName=$(basename ${model_path} .tar.gz)
-        # ensure model is ready and tag as production
-        sleep 5
-        curl -X PUT "${{ env.DOMAIN }}/projects/default/models/${model_fileName}/tags/production?api_token=${{env.RASA_X_API_TOKEN}}"
+    # - name: Model active
+    #   if: env.RUN_TRAINING == 'true'
+    #   working-directory: ${{ github.workspace }}
+    #   run: |
+    #     model_path=`ls models/*.tar.gz | head -n 1`
+    #     echo "$model_path"
+    #     # export model_fileName=$(basename ${model_path} .tar.gz)
+    #     # # ensure model is ready and tag as production
+    #     # sleep 5
+    #     # curl -X PUT "${{ env.DOMAIN }}/projects/default/models/${model_fileName}/tags/production?api_token=${{env.RASA_X_API_TOKEN}}"
